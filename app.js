@@ -14,18 +14,20 @@ const welcome = (req, res) => {
 app.get("/", welcome);
 
 const userHandlers = require("./userHandlers");
-const movieHandlers = require('./movieHandlers')
+const movieHandlers = require('./movieHandlers');
+const { validateMovie } = require('./validator')
+const { validateUser } = require('./validator')
 
 app.get("/api/users", userHandlers.getUsers);
 app.get("/api/users/:id", userHandlers.getUserById);
 app.get("/api/movies", movieHandlers.getMovies);
 app.get('/api/movies/:id', movieHandlers.getMovieById);
 
-app.post('/api/movies', movieHandlers.postMovie);
-app.post('/api/users', userHandlers.postUser);
+app.post('/api/movies', validateMovie, movieHandlers.postMovie);
+app.post('/api/users', validateUser, userHandlers.postUser);
 
-app.put('/api/movies/:id', movieHandlers.updateMovieById);
-app.put('/api/users/:id', userHandlers.updateUserById);
+app.put('/api/movies/:id', validateMovie, movieHandlers.updateMovieById);
+app.put('/api/users/:id', validateUser, userHandlers.updateUserById);
 
 app.delete('/api/movies/:id', movieHandlers.deleteMovieById);
 app.delete('/api/users/:id', userHandlers.deleteUserById);
